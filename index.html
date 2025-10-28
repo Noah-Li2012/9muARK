@@ -1,422 +1,491 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noah Li-Personal Website</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="channels4_profile.jpg" type="image/jpeg" />
-    <style>
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background: rgba(0,0,0,0.35);
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>李奇安九沐方舟</title>
+<meta name="description" content="李奇安九沐方舟 — 个人画廊展示" />
+<style>
+    :root{
+        --bg:#fafafa; --card:#fff; --muted:#666; --accent:#f0a500;
+        --nav:#1e1e1e; --glass: rgba(255,255,255,0.06);
+        --radius:12px; --gap:1.5rem;
+    }
 
-        html {
-            scroll-behavior: smooth;
+    @media (prefers-color-scheme: dark){
+        :root{
+            --bg:#0f0f10; --card:#141417; --muted:#bbb; --nav:#0b0b0b;
         }
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI","Noto Sans SC",system-ui,-apple-system,"Helvetica Neue",Arial;}
+    html,body{height:100%}
+    body{background:var(--bg); color: #222; transition:background .45s,color .45s; -webkit-font-smoothing:antialiased;}
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce){
+        * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+    }
 
-        .fade-in {
-            animation: fadeIn 2s ease-in-out forwards;
-            opacity: 0;
-        }
+    /* ---------- NAV ---------- */
+    nav{
+        position:sticky; top:0; z-index:120;
+        display:flex; align-items:center; justify-content:space-between;
+        padding:0.9rem 1.5rem; gap:1rem;
+        background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0));
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+    .logo{font-weight:700; color:var(--nav-text,#fff); font-size:1.25rem; letter-spacing:0.6px;}
+    .nav-right{display:flex; align-items:center; gap:0.75rem;}
+    .links a, .links button{ color:#fff; text-decoration:none; background:transparent; border:none; cursor:pointer; font-size:0.95rem;}
+    .links a:hover, .links button:hover{opacity:.95; transform:translateY(-1px)}
+    .toggle-dark{padding:.35rem .6rem; border-radius:8px; border:1px solid var(--accent); color:var(--accent); background:transparent; font-weight:600;}
+    .lang-btn{background:none;border:0;color:rgba(255,255,255,0.85);font-size:.9rem;opacity:.95}
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
+    /* ---------- HERO ---------- */
+    .hero{
+        height:68vh; min-height:420px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    }
+    /* 背景图片 / 渐变遮罩 / shader 效果 */
+    .hero .bg{
+        position:absolute; inset:0; z-index:0; overflow:hidden;
+        display:block;
+    }
+    .hero .bg img{
+        width:100%; height:100%; object-fit:cover; display:block;
+        filter: brightness(.72) contrast(1.05) saturate(.98);
+        transform-origin:center center;
+        transition: transform 12s cubic-bezier(.2,.8,.2,1);
+        will-change:transform;
+    }
+    /* hero overlay gradient / light */
+    .hero::after{
+        content:""; position:absolute; inset:0; z-index:1;
+        background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.45) 60%);
+        mix-blend-mode: multiply;
+        pointer-events:none;
+    }
+    /* 动态光圈 */
+    .hero .light{
+        position:absolute; z-index:2; filter:blur(60px) saturate(1.1); opacity:.55; mix-blend-mode:screen;
+        width:420px; height:420px; border-radius:50%; transform:translate(-50%,-50%);
+    }
+    .hero .title{
+        position:relative; z-index:3; color:#fff; font-size:3.1rem; font-weight:800; text-shadow:0 8px 32px rgba(0,0,0,0.6);
+        padding:0.25rem 0.5rem; letter-spacing:0.5px;
+    }
+    .hero .subtitle{ position:relative; z-index:3; color:rgba(255,255,255,0.88); margin-top:.45rem; font-size:1rem;}
 
-        .parallax-banner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.1;
-            z-index: 0;
-            will-change: transform;
-        }
+    /* 悬浮方块组（两个） */
+    .float-grid{ position:absolute; right:4vw; top:20%; z-index:4; display:flex; gap:.85rem; transform:translateZ(0); }
+    .float-card{
+        width:140px; height:140px; border-radius:12px; overflow:hidden; box-shadow:0 14px 40px rgba(8,12,20,0.5);
+        border:1px solid rgba(255,255,255,0.06); background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+        transition: transform .6s cubic-bezier(.2,.9,.25,1), box-shadow .25s;
+        will-change: transform;
+    }
+    .float-card img{ width:100%; height:100%; object-fit:cover; display:block; transform-origin:center center; transition: transform .6s; }
+    .float-card:hover{ transform:translateY(-10px) rotate(-1.2deg) scale(1.03); box-shadow:0 26px 60px rgba(7,9,20,0.6); }
+    .float-card:active{ transform:translateY(-4px) scale(1.01) }
 
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            opacity: 0.5;
-        }
+    /* hero 小屏微调 */
+    @media (max-width:900px){
+        .float-grid{ right:2vw; top:12% }
+        .float-card{ width:110px;height:110px }
+        .hero .title{ font-size:2.2rem }
+    }
+    @media(max-width:600px){
+        .float-grid{ display:none }
+        .hero{ height:50vh; min-height:320px; }
+    }
 
-        nav, section, footer {
-            position: relative;
-            z-index: 2;
-        }
-        .navbar-glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
+    /* ---------- 搜索栏 ---------- */
+    .search-wrap{ width:100%; display:flex; justify-content:center; padding:1.4rem 1rem 0 1rem; z-index:5; position:relative; }
+    .search-bar{
+        width:100%; max-width:880px; display:flex; gap:.5rem; align-items:center;
+        background:var(--card); border-radius:12px; box-shadow:0 10px 30px rgba(2,6,24,0.06); padding:.45rem;
+        border:1px solid rgba(0,0,0,0.04);
+    }
+    .search-bar input{ flex:1; border:0; outline:0; padding:.8rem .9rem; font-size:1rem; background:transparent; color:inherit; }
+    .search-bar button{ padding:.65rem 1rem; border-radius:10px; border:0; font-weight:700; cursor:pointer; background:var(--accent); color:#fff; }
+    .search-bar .filter-tags{ display:flex; gap:.5rem; margin-left:.5rem; flex-wrap:wrap }
 
-        .particles-js-canvas-el {
-            filter: blur(0.5px);
-        }
+    /* ---------- GALLERY (masonry-like) ---------- */
+    .gallery{ padding:1.6rem; display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap:1rem; align-items:start; max-width:1200px; margin:0 auto 2.2rem; }
+    .card{ background:var(--card); border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(2,6,24,0.06); cursor:pointer; transition: transform .25s, box-shadow .25s; border:1px solid rgba(0,0,0,0.03); }
+    .card:hover{ transform: translateY(-6px); box-shadow:0 20px 40px rgba(2,8,30,0.12); }
+    .card img{ width:100%; display:block; height:auto; object-fit:cover; aspect-ratio: 4/3; }
+    .card .meta{ padding:.7rem .8rem; font-weight:700; font-size:.95rem; color:var(--muted); display:flex; justify-content:space-between; align-items:center; gap:.6rem; }
+    .card .meta .title{ color: #222; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:calc(100% - 40px); }
+    .card .meta .tag{ font-size:.78rem; color:var(--muted); background:rgba(0,0,0,0.03); padding:.25rem .45rem; border-radius:6px; }
 
-        .gradient-text {
-            background: linear-gradient(45deg, #CCCCCC, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    /* skeleton */
+    .skeleton{ background:linear-gradient(90deg, rgba(0,0,0,0.03), rgba(0,0,0,0.06), rgba(0,0,0,0.03)); height:200px; border-radius:8px; }
 
-        .hover-scale {
-            transition: transform 0.3s ease;
-        }
+    /* 加载更多 */
+    .more-wrap{ display:flex; justify-content:center; margin:1.2rem 0 3rem; }
+    .btn-more{ padding:.6rem 1.1rem; border-radius:10px; border:0; background:transparent; cursor:pointer; border:1px solid rgba(0,0,0,0.06); font-weight:700; }
 
-        .hover-scale:hover {
-            transform: scale(1.05);
-        }
+    /* ---------- MODAL / LIGHTBOX ---------- */
+    .modal{ position:fixed; inset:0; display:none; z-index:250; align-items:center; justify-content:center; background:rgba(6,8,12,0.6); backdrop-filter: blur(6px); padding:2rem; }
+    .modal.show{ display:flex; }
+    .modal .panel{ width: min(1100px, 96%); max-height:92%; background:var(--card); border-radius:12px; overflow:auto; position:relative; padding:1rem; box-shadow:0 40px 100px rgba(2,8,30,0.6); }
+    .modal .imgwrap{ max-height:68vh; display:flex; align-items:center; justify-content:center; }
+    .modal img{ max-width:100%; max-height:68vh; object-fit:contain; border-radius:8px; display:block; }
+    .modal .desc{ padding: .8rem 1rem; color:var(--muted); line-height:1.6; font-size:0.98rem; background:transparent; }
+    .modal .close{ position:absolute; right:.8rem; top:.6rem; font-size:1.5rem; cursor:pointer; background:transparent; border:0; color:var(--muted); }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+    /* keyboard nav hints */
+    .kbd-hint{ position:absolute; left:1rem; bottom:1rem; font-size:.9rem; color:rgba(255,255,255,0.85); }
 
-        .skill-tag {
-            transition: all 0.3s ease;
-        }
+    /* footer */
+    footer{ text-align:center; padding:1.2rem; color:#fff; background:var(--nav); margin-top:1.6rem; font-size:.9rem;}
 
-        .skill-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    /* focus outline for accessibility */
+    :focus{ outline:3px solid rgba(240,165,0,0.25); outline-offset:3px; border-radius:6px; }
 
-        .social-icon {
-            transition: transform 0.3s ease;
-        }
+    /* small screens: stack */
+    @media(max-width:720px){
+        .search-bar{ padding:.4rem; gap:.4rem }
+        .hero .title{ font-size:1.6rem }
+        .hero .subtitle{ display:none }
+        nav{ padding:.6rem 0.9rem }
+    }
 
-        .social-icon:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Mobile background override */
-        @media only screen and (max-width: 768px) {
-            body {
-                background-position: left center !important;
-                background-size: cover !important;
-                background-repeat: no-repeat !important;
-                background-attachment: fixed !important;
-                min-height: 100vh !important;
-            }
-        }
-    </style>
+    /* SVG noise overlay */
+    .noise{ position:absolute; inset:0; z-index:5; pointer-events:none; mix-blend-mode:overlay; opacity:0.03 }
+</style>
 </head>
-<body class="bg-gray-900 text-white font-sans"
-    style="
-        background: url('https://cdn.jsdelivr.net/gh/Noah-Li2012/personalwebsite/bg-img.png') no-repeat center center fixed;
-        background-size: 108vw 108vh;
-        transition: background-position 0.3s cubic-bezier(0.4,0,0.2,1);
-    ">
-    <div id="particles-js"></div>
+<body>
 
-        <!-- Navbar -->
-    <nav class="navbar-glass shadow-lg fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold gradient-text">Noah Li</h1>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-white text-3xl focus:outline-none">&#9776;</button>
-            </div>
-            <div id="nav-links" class="hidden md:flex space-x-4">
-                <a href="#home" class="hover:text-teal-400 transition">Home</a>
-                <a href="#about" class="hover:text-teal-400 transition">About</a>
-                <a href="#projects" class="hover:text-teal-400 transition">Projects</a>
-                <a href="https://www.youtube.com/@noahliNotFound" target="_blank" class="hover:text-teal-400 transition">YouTube</a>
-                <a href="#contact" class="hover:text-teal-400 transition">Contact</a>
-            </div>
+<nav aria-label="主导航">
+    <div style="display:flex;align-items:center;gap:.8rem">
+        <div class="logo" id="logoText">李奇安九沐方舟</div>
+        <div style="font-size:.85rem;color:rgba(255,255,255,0.85);opacity:.9">个人艺术画廊</div>
+    </div>
+    <div class="nav-right">
+        <div class="links" style="display:flex;align-items:center;gap:.6rem">
+            <a href="#gallery" style="color:#fff">画廊</a>
+            <button class="toggle-dark" id="btnTheme" onclick="toggleDarkMode()" aria-pressed="false">夜间</button>
+            <button class="lang-btn" onclick="toggleLang()" aria-label="切换语言">中文/EN</button>
+            <button class="links" style="color:#fff" onclick="copyWeChat()" title="点击复制微信">联系</button>
         </div>
-        <div id="mobile-menu" class="md:hidden hidden flex-col space-y-2 px-4 pb-4">
-            <a href="#home" class="block hover:text-teal-400 transition">Home</a>
-            <a href="#about" class="block hover:text-teal-400 transition">About</a>
-            <a href="#projects" class="block hover:text-teal-400 transition">Projects</a>
-            <a href="#contact" class="block hover:text-teal-400 transition">Contact</a>
-        </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Home Section -->
-    <section id="home" class="h-screen flex items-center justify-center text-center pt-24 fade-in relative overflow-hidden">
-        <div class="flex flex-col items-center space-y-4 z-10">
-            <div class="flex items-center space-x-4">
-                <img src="channels4_profile.jpg" alt="Profile Picture" class="w-20 h-20 rounded-full border-2 border-teal-400 hover-scale">
-                <h2 class="text-4xl md:text-6xl font-bold gradient-text">
-                  Hey, I'm <span class="text-gray-500">Noah</span>
-                </h2>
-            </div>
-            <p id="rotating-message" class="text-lg text-gray-300 max-w-xl" style="overflow:hidden;white-space:nowrap;display:inline-block;"></p>
-            <audio id="go-brr-audio" loop></audio>
-            <div class="flex space-x-4 mt-4">
-                <a href="#projects" class="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-full transition hover-scale">
-                    View Projects
-                </a>
-                <a href="#contact" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-full transition hover-scale">
-                    Contact Me
-                </a>
-            </div>
-        </div>
-    </section>
+<section class="hero" id="hero">
+    <div class="bg" aria-hidden="true">
+        <img id="heroImage" src="" alt="李奇安 作品展示背景">
+    </div>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 px-6 md:px-20 bg-gray-800 fade-in relative">
-        <h3 class="text-3xl font-semibold mb-6 gradient-text">About Me</h3>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="glass-effect p-6 rounded-lg">
-                <p class="text-gray-300">
-                    I'm Noah, I love programming and creating videos on YouTube. (So Subscribe to my Channel @noahliNotFound if you like my content!)
-                </p>
-            </div>
-            <div class="glass-effect p-6 rounded-lg">
-                <h4 class="text-xl font-semibold mb-4">Habits</h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="habit-tag bg-teal-500 px-3 py-1 rounded-full text-sm">Coding</span>
-                    <span class="habit-tag bg-teal-500 px-3 py-1 rounded-full text-sm">Study as a normal student</span>
-                    <span class="habit-tag bg-teal-500 px-3 py-1 rounded-full text-sm">Create a video on YouTube every week</span>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- 动态光圈 -->
+    <div class="light" id="heroLight" style="left:18%; top:30%; background: radial-gradient(circle at 30% 30%, rgba(240,165,0,0.26), rgba(240,165,0,0.06) 30%, transparent 55%);"></div>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 px-6 md:px-20 fade-in relative">
-        <h3 class="text-3xl font-semibold mb-6 gradient-text">Projects</h3>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Project Card 1 -->
-            <div class="glass-effect p-6 rounded-lg hover-scale">
-                <h4 class="text-xl font-semibold mb-2">YouTube Channel</h4>
-                <p class="text-gray-300 mb-4">Sharing my programming adventure online!</p>
-                <div class="flex space-x-2">
-                    <a href="https://youtube.com/@noahliNotFound" target="_blank" class="text-teal-400 hover:underline">View Channel</a>
-                </div>
-            </div>
-            <!-- Project Card 2 -->
-            <div class="glass-effect p-6 rounded-lg hover-scale">
-                <h4 class="text-xl font-semibold mb-2">All Coding Projects</h4>
-                <p class="text-gray-300 mb-4">All my programs</p>
-                <div class="flex space-x-2">
-                    <a href="https://noahli404.pages.dev/projects" class="text-teal-400 hover:underline">Downloads</a>
-                </div>
-            </div>
-            <!-- Project Card 3 -->
-            <div class="glass-effect p-6 rounded-lg hover-scale">
-                <h4 class="text-xl font-semibold mb-2">More</h4>
-                <p class="text-gray-300 mb-4">View all projects</p>
-                <div class="flex space-x-2">
-                    <a href="https://noahli404.pages.dev/all" class="text-teal-400 hover:underline">View all</a>
-                </div>
-            </div>
+    <div style="position:relative;z-index:3; text-align:left; padding-left:3.5rem;">
+        <div class="title" id="heroTitle">李奇安</div>
+        <div class="subtitle" id="heroSubtitle">九沐方舟 — 油画创作</div>
+    </div>
 
-    </section>
+    <!-- 悬浮方块（两张） -->
+    <div class="float-grid" id="floatGrid" aria-hidden="true">
+        <div class="float-card" id="float1" tabindex="0"><img src="" alt="作品缩略1"></div>
+        <div class="float-card" id="float2" tabindex="0"><img src="" alt="作品缩略2"></div>
+    </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6 md:px-20 fade-in relative">
-        <h3 class="text-3xl font-semibold mb-6 gradient-text">Contact</h3>
-        <div class="glass-effect p-6 rounded-lg max-w-2xl mx-auto">
-            <ul class="space-y-4 text-gray-300">
-                <li class="flex items-center space-x-2">
-                    <i class="fas fa-envelope text-teal-400 social-icon"></i>
-                    <a href="mailto:importnoahli404@gmail.com" class="text-teal-400 hover:underline">importnoahli404@gmail.com</a>
-                </li>
-                <li class="flex items-center space-x-2">
-                    <i class="fab fa-discord text-teal-400 social-icon"></i>
-                    <a href="https://discord.com/users/noahlinotfound" target="_blank" class="text-teal-400 hover:underline">Discord: noahlinotfound</a>
-                </li>
-                <li class="flex items-center space-x-2">
-                    <i class="fab fa-youtube text-teal-400 social-icon"></i>
-                    <a href="https://youtube.com/@noahliNotFound" target="_blank" class="text-teal-400 hover:underline">YouTube: @noahliNotFound</a>
-                </li>
-            </ul>
-        </div>
-    </section>
+    <!-- 细微噪点叠加（SVG） -->
+    <svg class="noise" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
+        <filter id="grain"><feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+        <rect width="100%" height="100%" filter="url(#grain)" opacity="0.03" />
+    </svg>
+</section>
 
-    <footer class="text-center py-6 bg-gray-800 text-gray-400 fade-in relative">
-        © 2025 @noahliNotFound All rights reserved.
-    </footer>
+<div class="search-wrap">
+    <div class="search-bar" role="search" aria-label="搜索画廊">
+        <input id="searchInput" placeholder="搜索画作名称、关键词..." aria-label="搜索画作" />
+        <button id="searchBtn" onclick="searchGallery()">搜索</button>
+        <div style="width:10px"></div>
+        <div class="filter-tags" id="tagContainer" aria-hidden="true"></div>
+    </div>
+</div>
 
-    <script>
-        // Smooth auto-moving background
-        let bgAngle = 0;
-        function animateBgAuto() {
-            if (window.innerWidth <= 768) return; // skip animation on mobile
-            bgAngle += 0.0015; // speed
-            const radius = 24; // px, movement radius
-            const x = Math.cos(bgAngle) * radius;
-            const y = Math.sin(bgAngle) * radius;
-            document.body.style.backgroundPosition = `calc(50% + ${x}px) calc(50% + ${y}px)`;
-            requestAnimationFrame(animateBgAuto);
+<main>
+    <div id="loading" style="text-align:center;padding:2.6rem;color:var(--muted)">正在加载作品…</div>
+    <section class="gallery" id="gallery" aria-live="polite" aria-label="作品画廊"></section>
+    <div class="more-wrap">
+        <button class="btn-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">加载更多</button>
+    </div>
+</main>
+
+<!-- modal / lightbox -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="panel" role="document">
+        <button class="close" onclick="closeModal()" aria-label="关闭">✕</button>
+        <div class="imgwrap" id="modalImgWrap"><img id="modalImage" src="" alt=""></div>
+        <div class="desc" id="modalDescription">加载描述中…</div>
+    </div>
+</div>
+
+<footer>
+    © 2025 李奇安九沐方舟 | 版权所有
+</footer>
+
+<script>
+
+const githubRepoOwner = "Noah-Li2012"; // <-- 替换这里
+const githubRepoName = "9mufangzhou";        // <-- 替换这里
+const githubBranch = "main";
+
+/* 全局状态 */
+let paintings = [];       // {title,file,download_url,thumb_url}
+let page = 0;
+const PAGE_SIZE = 18;
+
+const galleryEl = document.getElementById('gallery');
+const loadingEl = document.getElementById('loading');
+const heroImage = document.getElementById('heroImage');
+const float1 = document.getElementById('float1').querySelector('img');
+const float2 = document.getElementById('float2').querySelector('img');
+const modal = document.getElementById('modal');
+const modalImage = document.getElementById('modalImage');
+const modalDescription = document.getElementById('modalDescription');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const searchInput = document.getElementById('searchInput');
+
+/* 简单工具 */
+function safeText(s){ return String(s || '').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* 主题：根据本地或系统偏好设置 */
+(function initTheme(){
+    const themeBtn = document.getElementById('btnTheme');
+    const stored = localStorage.getItem('site-theme');
+    if(stored === 'dark') document.documentElement.style.setProperty('--bg','#0b0b0b');
+    themeBtn.addEventListener('click', toggleDarkMode);
+})();
+function toggleDarkMode(){
+    document.body.classList.toggle('dark');
+    const pressed = document.body.classList.contains('dark');
+    document.getElementById('btnTheme').setAttribute('aria-pressed', pressed);
+    localStorage.setItem('site-theme', pressed ? 'dark' : 'light');
+}
+
+/* 语言切换（简单） */
+let isChinese = true;
+function toggleLang(){
+    isChinese = !isChinese;
+    document.getElementById('logoText').textContent = isChinese ? '李奇安九沐方舟' : 'Li QiAn Ark Studio';
+    document.getElementById('heroTitle').textContent = isChinese ? '李奇安' : 'Li QiAn';
+    document.getElementById('heroSubtitle').textContent = isChinese ? '九沐方舟 — 油画创作' : 'Li QiAn — Oil Painting Creations';
+    document.getElementById('searchInput').placeholder = isChinese ? '搜索画作名称、关键词...' : 'Search artworks...';
+    document.querySelector('footer').textContent = isChinese ? '&copy; 2025 李奇安九沐方舟 | 版权所有' : '&copy; 2025 Li QiAn Ark Studio | All Rights Reserved';
+}
+
+/* 复制微信 */
+function copyWeChat(){
+    navigator.clipboard?.writeText?.("VibeOil777").then(()=> {
+        alert("微信号已复制：VibeOil777 ✅");
+    }).catch(()=> {
+        prompt("请手动复制微信号：", "VibeOil777");
+    });
+}
+
+/* 获取仓库目录并解析图片列表
+   使用 GitHub Contents API：/repos/:owner/:repo/contents/
+   注意：此 API 在仓库文件很多时可能分页或返回目录结构，简单实现只读取根目录。
+*/
+async function fetchRepo(){
+    loadingEl.style.display = 'block';
+    loadingEl.textContent = '正在加载作品…';
+    galleryEl.innerHTML = '';
+    try{
+        const apiUrl = `https://api.github.com/repos/${githubRepoOwner}/${githubRepoName}/contents/`;
+        const res = await fetch(apiUrl);
+        if(!res.ok){
+            throw new Error(`GitHub API 返回 ${res.status}`);
         }
-        animateBgAuto();
+        const files = await res.json();
 
-        // // Play Go brr.mp3 in a loop
-        // // const goBrrAudio = document.getElementById('go-brr-audio');
-        // // Randomly select audio source
-        // // const audioFiles = ["Go brr.mp3", "Go brr2.mp3"];
-        // goBrrAudio.src = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-        // function playGoBrr(force) {
-        //     goBrrAudio.volume = 0.5;
-        //     // Try to force play
-        //     if (force) {
-        //         goBrrAudio.muted = false;
-        //         goBrrAudio.play().catch(() => {});
-        //     } else {
-        //         goBrrAudio.play().catch(() => {
-        //             // If autoplay is blocked, play on click
-        //             window.addEventListener('click', () => {
-        //                 goBrrAudio.play();
-        //             }, { once: true });
-        //         });
-        //     }
-        // }
-        // // Try to force play immediately
-        // // playGoBrr(true);
-        // // Fallback to click if needed
-        // // playGoBrr(false);
+        // 支持图片在根目录，筛选图片并生成 raw URLs（也可支持子目录：这里仅简单实现）
+        const imgs = files.filter(f=>{
+            const ext = (f.name.split('.').pop()||'').toLowerCase();
+            return f.type === 'file' && ['jpg','jpeg','png','webp','gif'].includes(ext);
+        }).map(f=>{
+            return {
+                title: f.name.split('.').slice(0,-1).join(' '),
+                file: f.name,
+                download_url: `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(f.name)}`,
+                thumb_url: `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(f.name)}`
 
-        const messages = [
-            "Noah —— That boi who codes for fun.",
-            "Help me reach 100 subscribers on YouTube!",
-            "Never give up on trolling your friends.",
-            "sub",
-            "I wish I could code as fast as I can think",
-            "I have infinite ideas!",
-            "I love creating useless/useful tools.",
-            "sub",
-            "Ideas are like a waterfall,it's infinite.",
-            "It's not like I have nothing to do, just lazy",
-            "Loading my mind.",
-            "Kept going, never stopped trolling your little brother.",
-        ];
-        let currentMsg = 0;
-        const msgElem = document.getElementById('rotating-message');
-
-        function scrollOutIn(newMsg) {
-            msgElem.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s';
-            msgElem.style.transform = 'translateY(-30px)';
-            msgElem.style.opacity = '0';
-            setTimeout(() => {
-                msgElem.textContent = newMsg;
-                msgElem.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    msgElem.style.transform = 'translateY(0)';
-                    msgElem.style.opacity = '1';
-                }, 50);
-            }, 500);
-        }
-
-        function rotateMessages() {
-            scrollOutIn(messages[currentMsg]);
-            currentMsg = (currentMsg + 1) % messages.length;
-            setTimeout(rotateMessages, 3500);
-        }
-        // Initialize first message
-        msgElem.textContent = messages[0];
-        msgElem.style.opacity = '1';
-        setTimeout(rotateMessages, 3500);
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            };
         });
 
-        // Parallax effect (disabled on mobile)
-        document.addEventListener("mousemove", (e) => {
-            if (window.innerWidth <= 768) return; // skip parallax on mobile
-            const banner = document.querySelector(".parallax-banner");
-            if (banner) {
-                const x = (e.clientX / window.innerWidth - 0.5) * 20;
-                const y = (e.clientY / window.innerHeight - 0.5) * 20;
-                banner.style.transform = `translate(${x}px, ${y}px)`;
-            }
-        });
+        // 如果没有图片，提示用户检查仓库是否公开或路径正确
+        if(imgs.length === 0){
+            loadingEl.textContent = "未找到任何图片，请确认 GitHub 仓库是否公开且根目录包含图片文件。";
+            return;
+        }
 
-        // Initialize particles
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: '#4fd1c5'
-                },
-                shape: {
-                    type: 'circle'
-                },
-                opacity: {
-                    value: 0.5,
-                    random: false,
-                    anim: {
-                        enable: false
-                    }
-                },
-                size: {
-                    value: 3,
-                    random: true
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#4fd1c5',
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: 'grab'
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: 'push'
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 140,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
-            retina_detect: true
-        });
-    </script>
+        // 将 paintings 按文件名排序（可按需要修改）
+        paintings = imgs.sort((a,b)=> a.title.localeCompare(b.title, 'zh-Hans'));
+        // 预设 hero 与浮动方块图片
+        heroImage.src = 'hero.jpg';
+        float1.src = 'box.jpg';
+        float2.src = paintings[2]?.thumb_url || paintings[0].thumb_url;
+
+        loadingEl.style.display = 'none';
+        page = 0;
+        renderPage();
+    } catch (err){
+        console.error(err);
+        loadingEl.textContent = '加载失败：请检查网络或仓库信息（在脚本中正确设置 GitHub 用户与仓库）。';
+    }
+}
+
+/* 渲染分页（客户端分页） */
+function renderPage(){
+    const start = page * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const chunk = paintings.slice(start, end);
+    if(page === 0) galleryEl.innerHTML = '';
+    chunk.forEach(p => galleryEl.appendChild(createCard(p)));
+    page++;
+    // 是否显示更多
+    loadMoreBtn.style.display = (page * PAGE_SIZE < paintings.length) ? 'inline-block' : 'none';
+}
+
+/* 创建画廊卡片元素 */
+function createCard(p){
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.tabIndex = 0;
+    card.setAttribute('role','button');
+    card.innerHTML = `
+        <div class="img"><img loading="lazy" data-src="${p.download_url}" alt="${safeText(p.title)}"></div>
+        <div class="meta"><div class="title">${safeText(p.title)}</div><div class="tag">查看</div></div>
+    `;
+    // lazy load image attribute
+    const img = card.querySelector('img');
+    img.addEventListener('load', ()=> img.style.opacity = 1);
+    // click -> open modal
+    card.addEventListener('click', ()=> openModal(p));
+    card.addEventListener('keyup', (e)=> { if(e.key === 'Enter') openModal(p); });
+    // Intersection observer for lazy loading
+    io.observe(img);
+    return card;
+}
+
+/* IntersectionObserver for image lazy loading */
+const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            const img = entry.target;
+            const src = img.dataset.src;
+            if(src && !img.src) img.src = src;
+            io.unobserve(img);
+        }
+    });
+},{rootMargin:'1000px'});
+
+/* 搜索（大小写不敏感）*/
+function searchGallery(){
+    const q = (searchInput.value || '').trim().toLowerCase();
+    if(!q){
+        page = 0; galleryEl.innerHTML=''; renderPage(); return;
+    }
+    const results = paintings.filter(p => p.title.toLowerCase().includes(q));
+    galleryEl.innerHTML = '';
+    if(results.length === 0){
+        galleryEl.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted)">未找到匹配项：${safeText(q)}</div>`;
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+    results.forEach(p => galleryEl.appendChild(createCard(p)));
+    loadMoreBtn.style.display = 'none';
+}
+
+/* 加载更多 */
+function loadMore(){
+    renderPage();
+}
+
+/* 打开 modal（并尝试加载同名 .txt 描述） */
+async function openModal(p){
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+    modalImage.src = p.download_url;
+    modalImage.alt = p.title;
+    modalDescription.textContent = '正在加载描述…';
+    // 试图读取同名 .txt
+    const descFile = p.file.split('.').slice(0,-1).join('.') + '.txt';
+    try{
+        const url = `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(descFile)}`;
+        const res = await fetch(url);
+        if(res.ok){
+            const t = await res.text();
+            modalDescription.textContent = t.trim() ? t : '此幅作品暂无描述。';
+        } else {
+            modalDescription.textContent = '此幅作品暂无描述。';
+        }
+    } catch {
+        modalDescription.textContent = '无法加载描述。';
+    }
+}
+
+/* 关闭 modal */
+function closeModal(){
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    modalImage.src = '';
+}
+
+/* 键盘事件：Esc 关闭 modal */
+window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape') closeModal();
+    // 快捷搜索回车
+    if(e.key === 'Enter' && document.activeElement === searchInput) searchGallery();
+});
+
+/* hero 鼠标移动视差 */
+(function heroParallax(){
+    const hero = document.getElementById('hero');
+    const light = document.getElementById('heroLight');
+    const fg1 = document.getElementById('float1').parentElement;
+    const fg2 = document.getElementById('float2').parentElement;
+
+    function onMove(e){
+        const rect = hero.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const x = (e.clientX - cx) / rect.width;
+        const y = (e.clientY - cy) / rect.height;
+        // transform hero image slightly
+        hero.querySelector('.bg img').style.transform = `scale(1.06) translate(${x*8}px, ${y*6}px)`;
+        // light position
+        light.style.left = `${50 + x*20}%`;
+        light.style.top = `${40 + y*20}%`;
+        // floats parallax (more pronounced)
+        fg1.style.transform = `translate3d(${x * -18}px, ${y * -10}px, 0) rotate(${x*4}deg)`;
+        fg2.style.transform = `translate3d(${x * 14}px, ${y * 8}px, 0) rotate(${x*-3}deg)`;
+    }
+    function onTouchMove(e){
+        if(!e.touches) return;
+        onMove(e.touches[0]);
+    }
+    hero.addEventListener('mousemove', onMove);
+    hero.addEventListener('touchmove', onTouchMove, {passive:true});
+})();
+
+/* 初始化并加载仓库 */
+fetchRepo();
+
+/* 轻量优化：当页面处于前台时逐步预加载更多缩略图 */
+document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState === 'visible'){
+        // 预加载下几张图片
+        const next = paintings.slice(0, 6);
+        next.forEach(p => { const i=new Image(); i.src=p.thumb_url; });
+    }
+});
+</script>
 </body>
 </html>
 <!-- ZGV2OiBOb2FoTGk0MDQ= (base64 xd)-->
