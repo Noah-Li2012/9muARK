@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>李奇安九沐方舟</title>
-<meta name="description" content="李奇安九沐方舟 — 个人画廊展示" />
+<title>李奇安工作室</title>
+<meta name="description" content="李奇安工作室 — 个人画廊展示" />
 <style>
     :root{
         --bg:#fafafa; --card:#fff; --muted:#666; --accent:#f0a500;
@@ -17,23 +17,16 @@
             --bg:#0f0f10; --card:#141417; --muted:#bbb; --nav:#0b0b0b;
         }
     }
+
     *{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI","Noto Sans SC",system-ui,-apple-system,"Helvetica Neue",Arial;}
     html,body{height:100%}
     body{background:var(--bg); color: #222; transition:background .45s,color .45s; -webkit-font-smoothing:antialiased;}
-    /* reduce motion */
     @media (prefers-reduced-motion: reduce){
         * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
     }
 
-    /* ---------- NAV ---------- */
-    nav{
-        position:sticky; top:0; z-index:120;
-        display:flex; align-items:center; justify-content:space-between;
-        padding:0.9rem 1.5rem; gap:1rem;
-        background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0));
-        backdrop-filter: blur(6px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    }
+    /* NAV / HERO styles (keep existing from your code) */
+    nav{position:sticky; top:0; z-index:120; display:flex; align-items:center; justify-content:space-between; padding:0.9rem 1.5rem; gap:1rem; background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0)); backdrop-filter: blur(6px); box-shadow: 0 6px 18px rgba(0,0,0,0.12);}
     .logo{font-weight:700; color:var(--nav-text,#fff); font-size:1.25rem; letter-spacing:0.6px;}
     .nav-right{display:flex; align-items:center; gap:0.75rem;}
     .links a, .links button{ color:#fff; text-decoration:none; background:transparent; border:none; cursor:pointer; font-size:0.95rem;}
@@ -41,410 +34,221 @@
     .toggle-dark{padding:.35rem .6rem; border-radius:8px; border:1px solid var(--accent); color:var(--accent); background:transparent; font-weight:600;}
     .lang-btn{background:none;border:0;color:rgba(255,255,255,0.85);font-size:.9rem;opacity:.95}
 
-    /* ---------- HERO ---------- */
-    .hero{
-        height:68vh; min-height:420px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;
-    }
-    /* 背景图片 / 渐变遮罩 / shader 效果 */
-    .hero .bg{
-        position:absolute; inset:0; z-index:0; overflow:hidden;
-        display:block;
-    }
-    .hero .bg img{
-        width:100%; height:100%; object-fit:cover; display:block;
-        filter: brightness(.72) contrast(1.05) saturate(.98);
-        transform-origin:center center;
-        transition: transform 12s cubic-bezier(.2,.8,.2,1);
-        will-change:transform;
-    }
-    /* hero overlay gradient / light */
-    .hero::after{
-        content:""; position:absolute; inset:0; z-index:1;
-        background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.45) 60%);
-        mix-blend-mode: multiply;
-        pointer-events:none;
-    }
-    /* 动态光圈 */
-    .hero .light{
-        position:absolute; z-index:2; filter:blur(60px) saturate(1.1); opacity:.55; mix-blend-mode:screen;
-        width:420px; height:420px; border-radius:50%; transform:translate(-50%,-50%);
-    }
-    .hero .title{
-        position:relative; z-index:3; color:#fff; font-size:3.1rem; font-weight:800; text-shadow:0 8px 32px rgba(0,0,0,0.6);
-        padding:0.25rem 0.5rem; letter-spacing:0.5px;
-    }
+    .hero{height:68vh; min-height:420px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+    .hero .bg{position:absolute; inset:0; z-index:0; overflow:hidden; display:block;}
+    .hero .bg img{ width:100%; height:100%; object-fit:cover; display:block; filter: brightness(.72) contrast(1.05) saturate(.98); transform-origin:center center; transition: transform 12s cubic-bezier(.2,.8,.2,1); will-change:transform;}
+    .hero::after{content:""; position:absolute; inset:0; z-index:1; background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.45) 60%); mix-blend-mode: multiply; pointer-events:none;}
+    .hero .light{position:absolute; z-index:2; filter:blur(60px) saturate(1.1); opacity:.55; mix-blend-mode:screen; width:420px; height:420px; border-radius:50%; transform:translate(-50%,-50%);}
+    .hero .title{position:relative; z-index:3; color:#fff; font-size:3.1rem; font-weight:800; text-shadow:0 8px 32px rgba(0,0,0,0.6); padding:0.25rem 0.5rem; letter-spacing:0.5px;}
     .hero .subtitle{ position:relative; z-index:3; color:rgba(255,255,255,0.88); margin-top:.45rem; font-size:1rem;}
-
-    /* 悬浮方块组（两个） */
     .float-grid{ position:absolute; right:4vw; top:20%; z-index:4; display:flex; gap:.85rem; transform:translateZ(0); }
-    .float-card{
-        width:140px; height:140px; border-radius:12px; overflow:hidden; box-shadow:0 14px 40px rgba(8,12,20,0.5);
-        border:1px solid rgba(255,255,255,0.06); background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
-        transition: transform .6s cubic-bezier(.2,.9,.25,1), box-shadow .25s;
-        will-change: transform;
-    }
+    .float-card{width:140px; height:140px; border-radius:12px; overflow:hidden; box-shadow:0 14px 40px rgba(8,12,20,0.5); border:1px solid rgba(255,255,255,0.06); background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12)); transition: transform .6s cubic-bezier(.2,.9,.25,1), box-shadow .25s; will-change: transform;}
     .float-card img{ width:100%; height:100%; object-fit:cover; display:block; transform-origin:center center; transition: transform .6s; }
     .float-card:hover{ transform:translateY(-10px) rotate(-1.2deg) scale(1.03); box-shadow:0 26px 60px rgba(7,9,20,0.6); }
     .float-card:active{ transform:translateY(-4px) scale(1.01) }
 
-    /* hero 小屏微调 */
-    @media (max-width:900px){
-        .float-grid{ right:2vw; top:12% }
-        .float-card{ width:110px;height:110px }
-        .hero .title{ font-size:2.2rem }
+    /* MARKDOWN container */
+    #markdownContent{
+        max-width:900px;
+        margin:2rem auto;
+        padding:1rem;
+        border-radius:var(--radius);
+        background:var(--card);
+        color:var(--muted);
+        line-height:1.6;
+        box-shadow:0 8px 24px rgba(0,0,0,0.08);
+        transition: background .3s, color .3s;
+        word-break: break-word;
     }
-    @media(max-width:600px){
-        .float-grid{ display:none }
-        .hero{ height:50vh; min-height:320px; }
-    }
-
-    /* ---------- 搜索栏 ---------- */
-    .search-wrap{ width:100%; display:flex; justify-content:center; padding:1.4rem 1rem 0 1rem; z-index:5; position:relative; }
-    .search-bar{
-        width:100%; max-width:880px; display:flex; gap:.5rem; align-items:center;
-        background:var(--card); border-radius:12px; box-shadow:0 10px 30px rgba(2,6,24,0.06); padding:.45rem;
-        border:1px solid rgba(0,0,0,0.04);
-    }
-    .search-bar input{ flex:1; border:0; outline:0; padding:.8rem .9rem; font-size:1rem; background:transparent; color:inherit; }
-    .search-bar button{ padding:.65rem 1rem; border-radius:10px; border:0; font-weight:700; cursor:pointer; background:var(--accent); color:#fff; }
-    .search-bar .filter-tags{ display:flex; gap:.5rem; margin-left:.5rem; flex-wrap:wrap }
-
-    /* ---------- GALLERY (masonry-like) ---------- */
-    .gallery{ padding:1.6rem; display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap:1rem; align-items:start; max-width:1200px; margin:0 auto 2.2rem; }
-    .card{ background:var(--card); border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(2,6,24,0.06); cursor:pointer; transition: transform .25s, box-shadow .25s; border:1px solid rgba(0,0,0,0.03); }
-    .card:hover{ transform: translateY(-6px); box-shadow:0 20px 40px rgba(2,8,30,0.12); }
-    .card img{ width:100%; display:block; height:auto; object-fit:cover; aspect-ratio: 4/3; }
-    .card .meta{ padding:.7rem .8rem; font-weight:700; font-size:.95rem; color:var(--muted); display:flex; justify-content:space-between; align-items:center; gap:.6rem; }
-    .card .meta .title{ color: #222; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:calc(100% - 40px); }
-    .card .meta .tag{ font-size:.78rem; color:var(--muted); background:rgba(0,0,0,0.03); padding:.25rem .45rem; border-radius:6px; }
-
-    /* skeleton */
-    .skeleton{ background:linear-gradient(90deg, rgba(0,0,0,0.03), rgba(0,0,0,0.06), rgba(0,0,0,0.03)); height:200px; border-radius:8px; }
-
-    /* 加载更多 */
-    .more-wrap{ display:flex; justify-content:center; margin:1.2rem 0 3rem; }
-    .btn-more{ padding:.6rem 1.1rem; border-radius:10px; border:0; background:transparent; cursor:pointer; border:1px solid rgba(0,0,0,0.06); font-weight:700; }
-
-    /* ---------- MODAL / LIGHTBOX ---------- */
-    .modal{ position:fixed; inset:0; display:none; z-index:250; align-items:center; justify-content:center; background:rgba(6,8,12,0.6); backdrop-filter: blur(6px); padding:2rem; }
-    .modal.show{ display:flex; }
-    .modal .panel{ width: min(1100px, 96%); max-height:92%; background:var(--card); border-radius:12px; overflow:auto; position:relative; padding:1rem; box-shadow:0 40px 100px rgba(2,8,30,0.6); }
-    .modal .imgwrap{ max-height:68vh; display:flex; align-items:center; justify-content:center; }
-    .modal img{ max-width:100%; max-height:68vh; object-fit:contain; border-radius:8px; display:block; }
-    .modal .desc{ padding: .8rem 1rem; color:var(--muted); line-height:1.6; font-size:0.98rem; background:transparent; }
-    .modal .close{ position:absolute; right:.8rem; top:.6rem; font-size:1.5rem; cursor:pointer; background:transparent; border:0; color:var(--muted); }
-
-    /* keyboard nav hints */
-    .kbd-hint{ position:absolute; left:1rem; bottom:1rem; font-size:.9rem; color:rgba(255,255,255,0.85); }
-
-    /* footer */
-    footer{ text-align:center; padding:1.2rem; color:#fff; background:var(--nav); margin-top:1.6rem; font-size:.9rem;}
-
-    /* focus outline for accessibility */
-    :focus{ outline:3px solid rgba(240,165,0,0.25); outline-offset:3px; border-radius:6px; }
-
-    /* small screens: stack */
-    @media(max-width:720px){
-        .search-bar{ padding:.4rem; gap:.4rem }
-        .hero .title{ font-size:1.6rem }
-        .hero .subtitle{ display:none }
-        nav{ padding:.6rem 0.9rem }
+    #markdownContent h1,h2,h3,h4,h5,h6 { color: #222; margin: 1rem 0 .5rem; }
+    #markdownContent p { margin: .6rem 0; }
+    #markdownContent pre { overflow-x:auto; border-radius:6px; padding:.8rem; background:rgba(0,0,0,0.04);}
+    #markdownContent code { font-family: monospace; font-size:.92rem; }
+    #markdownContent img { display:block; margin:1rem auto; border-radius:8px; transition: transform .3s ease; }
+    #markdownContent a { text-decoration:none; color:var(--accent); transition: opacity .2s; }
+    #markdownContent a:hover{opacity:.8;}
+    footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #1e1e1e, #0b0b0b);
+        color: #fff;
+        font-size: 0.95rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.25);
+        position: relative;
+        overflow: hidden;
     }
 
-    /* SVG noise overlay */
-    .noise{ position:absolute; inset:0; z-index:5; pointer-events:none; mix-blend-mode:overlay; opacity:0.03 }
+    /* Optional glow lines animation */
+    footer::before, footer::after {
+        content: '';
+        position: absolute;
+        width: 120%;
+        height: 1px;
+        left: -10%;
+        background: linear-gradient(90deg, rgba(240,165,0,0) 0%, rgba(240,165,0,0.35) 50%, rgba(240,165,0,0) 100%);
+        animation: glowline 3s infinite linear;
+    }
+
+    footer::after {
+        top: auto;
+        bottom: 0;
+        animation-delay: 1.5s;
+    }
+
+    @keyframes glowline {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* Footer links */
+    footer a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        margin: 0 0.5rem;
+        transition: transform 0.3s, opacity 0.3s;
+    }
+
+    footer a:hover {
+        transform: translateY(-2px);
+        opacity: 0.85;
+    }
+    #markdownContent blockquote {
+        border-left: 4px solid #f0a500; /* vertical line color */
+        padding-left: 1rem;             /* space from line */
+        color: #ffcc66;                 /* text color */
+        font-style: italic;             /* optional italic */
+        background: rgba(240, 165, 0, 0.05); /* subtle background */
+        margin: 1rem 0;
+    }
+    /* Code block container */
+    #markdownContent pre {
+        background: #1e1e1e;          /* dark card background for contrast */
+        color: #f0f0f0;               /* light text */
+        padding: 1rem;                 /* comfy padding */
+        border-radius: 12px;           /* rounded edges */
+        overflow-x: auto;              /* scroll if long line */
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        border-left: 4px solid var(--accent); /* fancy accent line */
+        font-family: 'Fira Code', monospace; /* nicer monospaced font */
+        font-size: 0.95rem;
+        line-height: 1.5;
+        transition: background .3s, color .3s;
+    }
+
+    /* Inline code */
+    #markdownContent code {
+        background: rgba(240,165,0,0.1);
+        color: var(--accent);
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.92rem;
+    }
+
+    /* Highlight.js integration */
+    .hljs {
+        background: none; /* inherit from pre */
+        color: inherit;
+        display: block;
+        overflow-x: auto;
+        padding: 0;
+    }
+
+    /* Optional: add rainbow color for keywords */
+    .hljs-keyword { color: #f0a500; font-weight: 600; }
+    .hljs-string  { color: #6dd400; }
+    .hljs-number  { color: #00d4ff; }
+    .hljs-comment { color: #999; font-style: italic; }
+    .hljs-function { color: #ff6a6a; }
+    /* Markdown headings in accent color */
+    #markdownContent h1,
+    #markdownContent h2,
+    #markdownContent h3,
+    #markdownContent h4,
+    #markdownContent h5,
+    #markdownContent h6 {
+        color: var(--accent); /* use your orange-ish main color */
+        margin: 1rem 0 0.5rem;
+        font-weight: 700;
+    }
+
+    /* Optional: smaller headings can have slightly lighter opacity */
+    #markdownContent h4,
+    #markdownContent h5,
+    #markdownContent h6 {
+        opacity: 0.9;
+    }
+
+    /* Paragraphs stay muted */
+    #markdownContent p {
+        color: var(--muted);
+        margin: 0.6rem 0;
+    }
+
 </style>
+
+<!-- Markdown + Highlight.js -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
 </head>
 <body>
 
 <nav aria-label="主导航">
     <div style="display:flex;align-items:center;gap:.8rem">
-        <div class="logo" id="logoText">李奇安九沐方舟</div>
+        <div class="logo" id="logoText">李奇安工作室</div>
         <div style="font-size:.85rem;color:rgba(255,255,255,0.85);opacity:.9">个人艺术画廊</div>
     </div>
     <div class="nav-right">
         <div class="links" style="display:flex;align-items:center;gap:.6rem">
-            <a href="#gallery" style="color:#fff">画廊</a>
-            <button class="toggle-dark" id="btnTheme" onclick="toggleDarkMode()" aria-pressed="false">夜间</button>
+            <a href="#markdownContent" style="color:#fff">欢迎</a>
             <button class="lang-btn" onclick="toggleLang()" aria-label="切换语言">中文/EN</button>
-            <button class="links" style="color:#fff" onclick="copyWeChat()" title="点击复制微信">联系</button>
         </div>
     </div>
 </nav>
 
 <section class="hero" id="hero">
     <div class="bg" aria-hidden="true">
-        <img id="heroImage" src="" alt="李奇安 作品展示背景">
+        <img id="heroImage" src="hero.jpg" alt="李奇安 作品展示背景">
     </div>
-
-    <!-- 动态光圈 -->
     <div class="light" id="heroLight" style="left:18%; top:30%; background: radial-gradient(circle at 30% 30%, rgba(240,165,0,0.26), rgba(240,165,0,0.06) 30%, transparent 55%);"></div>
-
     <div style="position:relative;z-index:3; text-align:left; padding-left:3.5rem;">
         <div class="title" id="heroTitle">李奇安</div>
         <div class="subtitle" id="heroSubtitle">九沐方舟 — 油画创作</div>
     </div>
-
-    <!-- 悬浮方块（两张） -->
-    <div class="float-grid" id="floatGrid" aria-hidden="true">
-        <div class="float-card" id="float1" tabindex="0"><img src="" alt="作品缩略1"></div>
-        <div class="float-card" id="float2" tabindex="0"><img src="" alt="作品缩略2"></div>
+    <div class="float-grid" aria-hidden="true">
+        <div class="float-card" tabindex="0"><img id="float1" src="box.jpg" alt="作品缩略1"></div>
+        <div class="float-card" tabindex="0"><img id="float2" src="box2.jpg" alt="作品缩略2"></div>
     </div>
-
-    <!-- 细微噪点叠加（SVG） -->
-    <svg class="noise" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
-        <filter id="grain"><feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-        <rect width="100%" height="100%" filter="url(#grain)" opacity="0.03" />
-    </svg>
 </section>
 
-<div class="search-wrap">
-    <div class="search-bar" role="search" aria-label="搜索画廊">
-        <input id="searchInput" placeholder="搜索画作名称、关键词..." aria-label="搜索画作" />
-        <button id="searchBtn" onclick="searchGallery()">搜索</button>
-        <div style="width:10px"></div>
-        <div class="filter-tags" id="tagContainer" aria-hidden="true"></div>
-    </div>
-</div>
-
-<main>
-    <div id="loading" style="text-align:center;padding:2.6rem;color:var(--muted)">正在加载作品…</div>
-    <section class="gallery" id="gallery" aria-live="polite" aria-label="作品画廊"></section>
-    <div class="more-wrap">
-        <button class="btn-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">加载更多</button>
-    </div>
-</main>
-
-<!-- modal / lightbox -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="panel" role="document">
-        <button class="close" onclick="closeModal()" aria-label="关闭">✕</button>
-        <div class="imgwrap" id="modalImgWrap"><img id="modalImage" src="" alt=""></div>
-        <div class="desc" id="modalDescription">加载描述中…</div>
-    </div>
-</div>
+<!-- MARKDOWN content -->
+<section id="markdownContent"></section>
 
 <footer>
-    © 2025 李奇安九沐方舟 | 版权所有
+    © 2025 李奇安工作室 | 版权所有
 </footer>
 
 <script>
-
-const githubRepoOwner = "Noah-Li2012"; // <-- 替换这里
-const githubRepoName = "9mufangzhou";        // <-- 替换这里
-const githubBranch = "main";
-
-/* 全局状态 */
-let paintings = [];       // {title,file,download_url,thumb_url}
-let page = 0;
-const PAGE_SIZE = 18;
-
-const galleryEl = document.getElementById('gallery');
-const loadingEl = document.getElementById('loading');
-const heroImage = document.getElementById('heroImage');
-const float1 = document.getElementById('float1').querySelector('img');
-const float2 = document.getElementById('float2').querySelector('img');
-const modal = document.getElementById('modal');
-const modalImage = document.getElementById('modalImage');
-const modalDescription = document.getElementById('modalDescription');
-const loadMoreBtn = document.getElementById('loadMoreBtn');
-const searchInput = document.getElementById('searchInput');
-
-/* 简单工具 */
-function safeText(s){ return String(s || '').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-/* 主题：根据本地或系统偏好设置 */
-(function initTheme(){
-    const themeBtn = document.getElementById('btnTheme');
-    const stored = localStorage.getItem('site-theme');
-    if(stored === 'dark') document.documentElement.style.setProperty('--bg','#0b0b0b');
-    themeBtn.addEventListener('click', toggleDarkMode);
-})();
-function toggleDarkMode(){
-    document.body.classList.toggle('dark');
-    const pressed = document.body.classList.contains('dark');
-    document.getElementById('btnTheme').setAttribute('aria-pressed', pressed);
-    localStorage.setItem('site-theme', pressed ? 'dark' : 'light');
-}
-
-/* 语言切换（简单） */
+/* Language toggle */
 let isChinese = true;
 function toggleLang(){
     isChinese = !isChinese;
-    document.getElementById('logoText').textContent = isChinese ? '李奇安九沐方舟' : 'Li QiAn Ark Studio';
+    document.getElementById('logoText').textContent = isChinese ? '李奇安工作室' : 'Li QiAn Studio';
     document.getElementById('heroTitle').textContent = isChinese ? '李奇安' : 'Li QiAn';
     document.getElementById('heroSubtitle').textContent = isChinese ? '九沐方舟 — 油画创作' : 'Li QiAn — Oil Painting Creations';
-    document.getElementById('searchInput').placeholder = isChinese ? '搜索画作名称、关键词...' : 'Search artworks...';
-    document.querySelector('footer').textContent = isChinese ? '&copy; 2025 李奇安九沐方舟 | 版权所有' : '&copy; 2025 Li QiAn Ark Studio | All Rights Reserved';
+    document.querySelector('footer').textContent = isChinese ? '© 2025 李奇安工作室 | 版权所有' : '© 2025 Li QiAn Studio | All Rights Reserved';
 }
 
-/* 复制微信 */
+/* Copy WeChat */
 function copyWeChat(){
-    navigator.clipboard?.writeText?.("VibeOil777").then(()=> {
-        alert("微信号已复制：VibeOil777 ✅");
-    }).catch(()=> {
-        prompt("请手动复制微信号：", "VibeOil777");
-    });
+    navigator.clipboard?.writeText?.("VibeOil777").then(()=> { alert("微信号已复制：VibeOil777 ✅"); }).catch(()=> { prompt("请手动复制微信号：", "VibeOil777"); });
 }
 
-/* 获取仓库目录并解析图片列表
-   使用 GitHub Contents API：/repos/:owner/:repo/contents/
-   注意：此 API 在仓库文件很多时可能分页或返回目录结构，简单实现只读取根目录。
-*/
-async function fetchRepo(){
-    loadingEl.style.display = 'block';
-    loadingEl.textContent = '正在加载作品…';
-    galleryEl.innerHTML = '';
-    try{
-        const apiUrl = `https://api.github.com/repos/${githubRepoOwner}/${githubRepoName}/contents/`;
-        const res = await fetch(apiUrl);
-        if(!res.ok){
-            throw new Error(`GitHub API 返回 ${res.status}`);
-        }
-        const files = await res.json();
-
-        // 支持图片在根目录，筛选图片并生成 raw URLs（也可支持子目录：这里仅简单实现）
-        const imgs = files.filter(f=>{
-            const ext = (f.name.split('.').pop()||'').toLowerCase();
-            return f.type === 'file' && ['jpg','jpeg','png','webp','gif'].includes(ext);
-        }).map(f=>{
-            return {
-                title: f.name.split('.').slice(0,-1).join(' '),
-                file: f.name,
-                download_url: `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(f.name)}`,
-                thumb_url: `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(f.name)}`
-
-            };
-        });
-
-        // 如果没有图片，提示用户检查仓库是否公开或路径正确
-        if(imgs.length === 0){
-            loadingEl.textContent = "未找到任何图片，请确认 GitHub 仓库是否公开且根目录包含图片文件。";
-            return;
-        }
-
-        // 将 paintings 按文件名排序（可按需要修改）
-        paintings = imgs.sort((a,b)=> a.title.localeCompare(b.title, 'zh-Hans'));
-        // 预设 hero 与浮动方块图片
-        heroImage.src = 'hero.jpg';
-        float1.src = 'box.jpg';
-        float2.src = paintings[2]?.thumb_url || paintings[0].thumb_url;
-
-        loadingEl.style.display = 'none';
-        page = 0;
-        renderPage();
-    } catch (err){
-        console.error(err);
-        loadingEl.textContent = '加载失败：请检查网络或仓库信息（在脚本中正确设置 GitHub 用户与仓库）。';
-    }
-}
-
-/* 渲染分页（客户端分页） */
-function renderPage(){
-    const start = page * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    const chunk = paintings.slice(start, end);
-    if(page === 0) galleryEl.innerHTML = '';
-    chunk.forEach(p => galleryEl.appendChild(createCard(p)));
-    page++;
-    // 是否显示更多
-    loadMoreBtn.style.display = (page * PAGE_SIZE < paintings.length) ? 'inline-block' : 'none';
-}
-
-/* 创建画廊卡片元素 */
-function createCard(p){
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.tabIndex = 0;
-    card.setAttribute('role','button');
-    card.innerHTML = `
-        <div class="img"><img loading="lazy" data-src="${p.download_url}" alt="${safeText(p.title)}"></div>
-        <div class="meta"><div class="title">${safeText(p.title)}</div><div class="tag">查看</div></div>
-    `;
-    // lazy load image attribute
-    const img = card.querySelector('img');
-    img.addEventListener('load', ()=> img.style.opacity = 1);
-    // click -> open modal
-    card.addEventListener('click', ()=> openModal(p));
-    card.addEventListener('keyup', (e)=> { if(e.key === 'Enter') openModal(p); });
-    // Intersection observer for lazy loading
-    io.observe(img);
-    return card;
-}
-
-/* IntersectionObserver for image lazy loading */
-const io = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
-            const img = entry.target;
-            const src = img.dataset.src;
-            if(src && !img.src) img.src = src;
-            io.unobserve(img);
-        }
-    });
-},{rootMargin:'1000px'});
-
-/* 搜索（大小写不敏感）*/
-function searchGallery(){
-    const q = (searchInput.value || '').trim().toLowerCase();
-    if(!q){
-        page = 0; galleryEl.innerHTML=''; renderPage(); return;
-    }
-    const results = paintings.filter(p => p.title.toLowerCase().includes(q));
-    galleryEl.innerHTML = '';
-    if(results.length === 0){
-        galleryEl.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted)">未找到匹配项：${safeText(q)}</div>`;
-        loadMoreBtn.style.display = 'none';
-        return;
-    }
-    results.forEach(p => galleryEl.appendChild(createCard(p)));
-    loadMoreBtn.style.display = 'none';
-}
-
-/* 加载更多 */
-function loadMore(){
-    renderPage();
-}
-
-/* 打开 modal（并尝试加载同名 .txt 描述） */
-async function openModal(p){
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
-    modalImage.src = p.download_url;
-    modalImage.alt = p.title;
-    modalDescription.textContent = '正在加载描述…';
-    // 试图读取同名 .txt
-    const descFile = p.file.split('.').slice(0,-1).join('.') + '.txt';
-    try{
-        const url = `https://cdn.jsdelivr.net/gh/${githubRepoOwner}/${githubRepoName}@${githubBranch}/${encodeURIComponent(descFile)}`;
-        const res = await fetch(url);
-        if(res.ok){
-            const t = await res.text();
-            modalDescription.textContent = t.trim() ? t : '此幅作品暂无描述。';
-        } else {
-            modalDescription.textContent = '此幅作品暂无描述。';
-        }
-    } catch {
-        modalDescription.textContent = '无法加载描述。';
-    }
-}
-
-/* 关闭 modal */
-function closeModal(){
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden','true');
-    modalImage.src = '';
-}
-
-/* 键盘事件：Esc 关闭 modal */
-window.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape') closeModal();
-    // 快捷搜索回车
-    if(e.key === 'Enter' && document.activeElement === searchInput) searchGallery();
-});
-
-/* hero 鼠标移动视差 */
+/* Hero parallax */
 (function heroParallax(){
     const hero = document.getElementById('hero');
     const light = document.getElementById('heroLight');
@@ -457,35 +261,42 @@ window.addEventListener('keydown', (e)=>{
         const cy = rect.top + rect.height/2;
         const x = (e.clientX - cx) / rect.width;
         const y = (e.clientY - cy) / rect.height;
-        // transform hero image slightly
         hero.querySelector('.bg img').style.transform = `scale(1.06) translate(${x*8}px, ${y*6}px)`;
-        // light position
         light.style.left = `${50 + x*20}%`;
         light.style.top = `${40 + y*20}%`;
-        // floats parallax (more pronounced)
         fg1.style.transform = `translate3d(${x * -18}px, ${y * -10}px, 0) rotate(${x*4}deg)`;
         fg2.style.transform = `translate3d(${x * 14}px, ${y * 8}px, 0) rotate(${x*-3}deg)`;
     }
-    function onTouchMove(e){
-        if(!e.touches) return;
-        onMove(e.touches[0]);
-    }
     hero.addEventListener('mousemove', onMove);
-    hero.addEventListener('touchmove', onTouchMove, {passive:true});
+    hero.addEventListener('touchmove', e=>{ if(e.touches) onMove(e.touches[0]); }, {passive:true});
 })();
 
-/* 初始化并加载仓库 */
-fetchRepo();
+/* Load Markdown dynamically */
+async function loadMarkdown(file='welcome.md'){
+    try{
+        const res = await fetch(file);
+        if(!res.ok) throw new Error('Markdown load failed');
+        const text = await res.text();
+        const html = marked.parse(text, {gfm:true, breaks:true, smartLists:true});
+        const container = document.getElementById('markdownContent');
+        container.innerHTML = html;
 
-/* 轻量优化：当页面处于前台时逐步预加载更多缩略图 */
-document.addEventListener('visibilitychange', ()=>{
-    if(document.visibilityState === 'visible'){
-        // 预加载下几张图片
-        const next = paintings.slice(0, 6);
-        next.forEach(p => { const i=new Image(); i.src=p.thumb_url; });
+        container.querySelectorAll('img').forEach(img=>{
+            img.style.maxWidth='100%';
+            img.style.borderRadius='8px';
+            img.style.transition='transform .3s ease';
+            img.style.cursor='pointer';
+            img.onmouseover = ()=>img.style.transform='scale(1.03)';
+            img.onmouseout = ()=>img.style.transform='scale(1)';
+        });
+        container.querySelectorAll('a').forEach(a=>{a.target='_blank';});
+        container.querySelectorAll('pre code').forEach(block=>hljs.highlightBlock(block));
+    }catch(err){
+        console.error(err);
+        document.getElementById('markdownContent').innerHTML="<p>无法加载内容 😢</p>";
     }
-});
+}
+loadMarkdown();
 </script>
 </body>
 </html>
-<!-- ZGV2OiBOb2FoTGk0MDQ= (base64 xd)-->
